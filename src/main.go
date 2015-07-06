@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/gorilla/context"
 	"github.com/justinas/alice"
@@ -66,6 +67,7 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func getUser(token string) (user string, err error) {
+	err = errors.New("this is error")
 	return user, err
 }
 
