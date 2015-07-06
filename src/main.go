@@ -3,9 +3,10 @@ package main
 import (
 	"database/sql"
 	"encoding/json"
-	"errors"
+	// "errors"
 	"fmt"
 	"github.com/gorilla/context"
+	"github.com/julienschmidt/httprouter"
 	"github.com/justinas/alice"
 	"log"
 	"net/http"
@@ -67,8 +68,15 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func getUser(token string) (user string, err error) {
-	err = errors.New("this is error")
+	// err = errors.New("this is error")
 	return user, err
+}
+
+func wrapHandler(h http.Handler) httprouter.Handle {
+	return func(res http.ResponseWriter, req *http.Request, params httprouter.Params) {
+		context.Set(req, "params", params)
+		h.ServeHTTP(res, req)
+	}
 }
 
 func main() {
@@ -78,6 +86,7 @@ func main() {
 	}
 	appC := appContext{db}
 	commonHandlers := alice.New(context.ClearHandler, loggingHandler, recoveryHandler, appC.authHandler)
-	http.Handle("/", commonHandlers.ThenFunc(indexHandler))
-	http.ListenAndServe(":8080", nil)
+	router := httprouter.New()
+	router.GET("/", wrapHandler(commonHandlers.ThenFunc(indexHandler)))
+	http.ListenAndServe(":8080", router)
 }
