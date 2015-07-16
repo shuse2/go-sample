@@ -5,12 +5,12 @@ import (
 	"encoding/json"
 	// "errors"
 	"fmt"
+	"github.com/go-sample/app/loggers"
 	"github.com/gorilla/context"
 	"github.com/julienschmidt/httprouter"
 	"github.com/justinas/alice"
 	"log"
 	"net/http"
-	"time"
 )
 
 type appContext struct {
@@ -36,17 +36,6 @@ func (c *appContext) authHandler(next http.Handler) http.Handler {
 func (c *appContext) adminHandler(res http.ResponseWriter, req *http.Request) {
 	user := context.Get(req, "user")
 	json.NewEncoder(res).Encode(user)
-}
-
-func loggingHandler(next http.Handler) http.Handler {
-	fn := func(res http.ResponseWriter, req *http.Request) {
-		t1 := time.Now()
-		next.ServeHTTP(res, req)
-		t2 := time.Now()
-		log.Printf("[%s] %q %v\n", req.Method, req.URL.String(), t2.Sub(t1))
-	}
-
-	return http.HandlerFunc(fn)
 }
 
 func recoveryHandler(next http.Handler) http.Handler {
@@ -85,7 +74,7 @@ func main() {
 		log.Println("supposed to show error")
 	}
 	appC := appContext{db}
-	commonHandlers := alice.New(context.ClearHandler, loggingHandler, recoveryHandler, appC.authHandler)
+	commonHandlers := alice.New(context.ClearHandler, loggers.LoggingHandler, recoveryHandler, appC.authHandler)
 	router := httprouter.New()
 	router.GET("/", wrapHandler(commonHandlers.ThenFunc(indexHandler)))
 	http.ListenAndServe(":8080", router)
