@@ -1,7 +1,7 @@
 package loggers
 
 import (
-	"log"
+	"github.com/golang/glog"
 	"net/http"
 	"time"
 )
@@ -11,7 +11,7 @@ func LoggingHandler(next http.Handler) http.Handler {
 		t1 := time.Now()
 		next.ServeHTTP(res, req)
 		t2 := time.Now()
-		log.Printf("[%s] %q %v\n", req.Method, req.URL.String(), t2.Sub(t1))
+		glog.Infof("[%s] %q %v\n", req.Method, req.URL.String(), t2.Sub(t1))
 	}
 
 	return http.HandlerFunc(fn)
