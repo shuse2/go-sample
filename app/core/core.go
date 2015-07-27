@@ -14,6 +14,7 @@ type Application struct {
 
 func (application *Application) Init(filename string) {
 	application.Configuration = &Configuration{}
+
 	err := application.Configuration.Load(filename)
 
 	if err != nil {

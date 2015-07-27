@@ -1,0 +1,8 @@
+{
+  "seacret": "",
+  "public_path": "public",
+  "ConfigurationDatabase": {
+    "Hosts": "localhost",
+    "database": ""
+  }
+}
