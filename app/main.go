@@ -23,6 +23,7 @@ func wrapHandler(h http.Handler) httprouter.Handle {
 
 func main() {
 	filename := flag.String("config", "config/local.json", "Path to configuration file")
+	flag.Parse()
 
 	defer glog.Flush()
 
