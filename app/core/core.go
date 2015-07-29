@@ -39,7 +39,3 @@ func (application *Application) Close() {
 	glog.Info("Closing application")
 	application.DBSession.Close()
 }
-
-func (application *Application) GetApplicaton() *Application {
-	return application
-}

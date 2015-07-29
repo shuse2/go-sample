@@ -8,10 +8,10 @@ import (
 func GetUser(token string) error {
 	// err = errors.New("this is error")
 	var err error
-	user := models.User{
-		username: "abc",
-		password: "pass",
-		token:    "aaa",
+	user := &models.User{
+		Username: "abc",
+		Password: "pass",
+		Token:    "aaa",
 	}
 	dbc := core.GetApplicaton()
 	c := dbc.DB("go-sample").c("user")
