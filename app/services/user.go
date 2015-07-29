@@ -1,11 +1,19 @@
 package services
 
 import (
+	"github.com/go-sample/app/core"
 	"github.com/go-sample/app/models"
 )
 
-func GetUser(token string) (models.User, error) {
+func GetUser(token string) error {
 	// err = errors.New("this is error")
 	var err error
-	return models.User{}, err
+	user := models.User{
+		username: "abc",
+		password: "pass",
+		token:    "aaa",
+	}
+	dbc := core.GetApplicaton()
+	c := dbc.DB("go-sample").c("user")
+	return c.Insert(user)
 }

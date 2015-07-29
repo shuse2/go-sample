@@ -29,6 +29,7 @@ func main() {
 
 	var application = &core.Application{}
 	application.Init(*filename)
+	application.ConnectDB()
 
 	// set up middleware
 	commonHandlers := alice.New(context.ClearHandler, loggers.LoggingHandler, application.RecoveryHandler, application.AuthHandler)
@@ -37,5 +38,6 @@ func main() {
 	router := httprouter.New()
 	router.GET("/", wrapHandler(commonHandlers.ThenFunc(controllers.IndexHandler)))
 
-	http.ListenAndServe(":8080", router)
+	glog.Info("Starting server at 3000")
+	http.ListenAndServe(":3000", router)
 }
