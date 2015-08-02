@@ -9,16 +9,17 @@ var (
 	Dbm *mgo.Session
 )
 
-func Init(filename string) {
-	dbm, err := mgo.Dial(application.Configuration.Database.Hosts)
+func Init(host string) {
+	dbm, err := mgo.Dial(host)
 
 	if err != nil {
 		glog.Fatalf("Cannot connect to database %v", err)
 		panic(err)
 	}
+	Dbm = dbm
 }
 
 func Close() {
 	glog.Info("Closing application")
-	application.DBSession.Close()
+	Dbm.Close()
 }

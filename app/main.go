@@ -7,6 +7,7 @@ import (
 	"github.com/go-sample/app/controllers"
 	"github.com/go-sample/app/core"
 	"github.com/go-sample/app/loggers"
+	"github.com/go-sample/app/models"
 	"github.com/gorilla/context"
 	"github.com/julienschmidt/httprouter"
 	"github.com/justinas/alice"
@@ -29,7 +30,8 @@ func main() {
 
 	var application = &core.Application{}
 	application.Init(*filename)
-	application.ConnectDB()
+	models.Init(application.Configuration.Database.Hosts)
+	defer models.Close()
 
 	// set up middleware
 	commonHandlers := alice.New(context.ClearHandler, loggers.LoggingHandler, application.RecoveryHandler, application.AuthHandler)
