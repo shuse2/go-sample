@@ -9,8 +9,8 @@ import (
 
 func (application *Application) AuthHandler(next http.Handler) http.Handler {
 	fn := func(res http.ResponseWriter, req *http.Request) {
-		// authToken := req.Header.Get("Authentication")
-		user, err := models.GetUser("aaa", "12345")
+		authToken := req.Header.Get("Authentication")
+		user, err := models.GetUser("123", authToken)
 
 		if err != nil {
 			http.Error(res, http.StatusText(401), 401)

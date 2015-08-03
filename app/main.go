@@ -34,12 +34,15 @@ func main() {
 	defer models.Close()
 
 	// set up middleware
-	commonHandlers := alice.New(context.ClearHandler, loggers.LoggingHandler, application.RecoveryHandler, application.AuthHandler)
+	commonHandlers := alice.New(context.ClearHandler, loggers.LoggingHandler, application.RecoveryHandler)
 
 	// setup routes
 	router := httprouter.New()
 	router.ServeFiles("/public/*filepath", http.Dir("public"))
 	router.GET("/", wrapHandler(commonHandlers.ThenFunc(controllers.IndexHandler)))
+	// add auth handler
+	commonHandlers = commonHandlers.Append(application.AuthHandler)
+	router.GET("/api/user", wrapHandler(commonHandlers.ThenFunc(controllers.UserHandler)))
 
 	glog.Info("Starting server at 3000")
 	http.ListenAndServe(":3000", router)
