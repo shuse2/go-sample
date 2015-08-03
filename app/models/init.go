@@ -6,20 +6,22 @@ import (
 )
 
 var (
-	Dbm *mgo.Session
+	dbm      *mgo.Session
+	database string
 )
 
-func Init(host string) {
-	dbm, err := mgo.Dial(host)
+func Init(host string, dbName string) {
+	connection, err := mgo.Dial(host)
 
 	if err != nil {
 		glog.Fatalf("Cannot connect to database %v", err)
 		panic(err)
 	}
-	Dbm = dbm
+	dbm = connection
+	database = dbName
 }
 
 func Close() {
 	glog.Info("Closing application")
-	Dbm.Close()
+	dbm.Close()
 }

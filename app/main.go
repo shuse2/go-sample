@@ -30,7 +30,7 @@ func main() {
 
 	var application = &core.Application{}
 	application.Init(*filename)
-	models.Init(application.Configuration.Database.Hosts)
+	models.Init(application.Configuration.Database.Host, application.Configuration.Database.Database)
 	defer models.Close()
 
 	// set up middleware

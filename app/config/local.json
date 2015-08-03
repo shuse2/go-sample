@@ -1,8 +1,8 @@
 {
-  "seacret": "",
+  "secret": "",
   "public_path": "public",
-  "ConfigurationDatabase": {
-    "Hosts": "localhost",
-    "database": ""
+  "configuration_database": {
+    "host": "localhost",
+    "database": "go-sample"
   }
 }

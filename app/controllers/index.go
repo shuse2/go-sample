@@ -9,9 +9,8 @@ import (
 // controller
 func IndexHandler(w http.ResponseWriter, r *http.Request) {
 	user := &models.User{
-		Username: "aaa",
+		UserId:   "aaa",
 		Password: "12345",
-		Token:    "abc",
 	}
 	models.CreateUser(user)
 	fmt.Fprintf(w, "index handler")

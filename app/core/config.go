@@ -6,14 +6,14 @@ import (
 )
 
 type ConfigurationDatabase struct {
-	Hosts    string `json:"Hosts"`
+	Host     string `json:"host"`
 	Database string `json:"database"`
 }
 
 type Configuration struct {
-	Secret     string `json:"seacret"`
-	PublicPath string `json:"public_path"`
-	Database   ConfigurationDatabase
+	Secret     string                `json:"secret"`
+	PublicPath string                `json:"public_path"`
+	Database   ConfigurationDatabase `json:"configuration_database"`
 }
 
 func (config *Configuration) Load(filename string) error {
