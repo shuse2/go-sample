@@ -38,6 +38,7 @@ func main() {
 
 	// setup routes
 	router := httprouter.New()
+	router.ServeFiles("/public/*filepath", http.Dir("public"))
 	router.GET("/", wrapHandler(commonHandlers.ThenFunc(controllers.IndexHandler)))
 
 	glog.Info("Starting server at 3000")
