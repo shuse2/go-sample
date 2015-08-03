@@ -8,6 +8,11 @@ import (
 
 // controller
 func IndexHandler(w http.ResponseWriter, r *http.Request) {
-	models.GetUser("aaa")
+	user := &models.User{
+		Username: "aaa",
+		Password: "12345",
+		Token:    "abc",
+	}
+	models.CreateUser(user)
 	fmt.Fprintf(w, "index handler")
 }

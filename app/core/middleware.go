@@ -1,8 +1,7 @@
 package core
 
 import (
-	// "github.com/go-sample/app/models"
-	// "github.com/go-sample/app/services"
+	"github.com/go-sample/app/models"
 	"github.com/golang/glog"
 	"github.com/gorilla/context"
 	"net/http"
@@ -11,9 +10,7 @@ import (
 func (application *Application) AuthHandler(next http.Handler) http.Handler {
 	fn := func(res http.ResponseWriter, req *http.Request) {
 		// authToken := req.Header.Get("Authentication")
-		// user, err := services.GetUser(authToken)
-		var user string
-		var err error
+		user, err := models.GetUser("abc")
 
 		if err != nil {
 			http.Error(res, http.StatusText(401), 401)
