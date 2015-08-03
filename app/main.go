@@ -30,7 +30,7 @@ func main() {
 
 	var application = &core.Application{}
 	application.Init(*filename)
-	models.Init(application.Configuration.Database.Host, application.Configuration.Database.Database)
+	models.Init(application.Configuration.MongoDatabase.Host, application.Configuration.MongoDatabase.Database, application.Configuration.RedisDatabase.Host, application.Configuration.RedisDatabase.Database)
 	defer models.Close()
 
 	// set up middleware

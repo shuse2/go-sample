@@ -5,15 +5,21 @@ import (
 	"io/ioutil"
 )
 
-type ConfigurationDatabase struct {
+type MongoConfig struct {
 	Host     string `json:"host"`
 	Database string `json:"database"`
 }
 
+type RedisConfig struct {
+	Host     string `json:"host"`
+	Database int64  `json:"database"`
+}
+
 type Configuration struct {
-	Secret     string                `json:"secret"`
-	PublicPath string                `json:"public_path"`
-	Database   ConfigurationDatabase `json:"configuration_database"`
+	Secret        string      `json:"secret"`
+	PublicPath    string      `json:"public_path"`
+	MongoDatabase MongoConfig `json:"mongo_config"`
+	RedisDatabase RedisConfig `json:"redis_config"`
 }
 
 func (config *Configuration) Load(filename string) error {

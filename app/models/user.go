@@ -27,7 +27,7 @@ type Token struct {
 
 func GetUser(userId string, password string) (*User, error) {
 	result := &User{}
-	c := dbm.DB(database).C("user")
+	c := dbm.DB(dbNameM).C("user")
 	hash := md5.Sum([]byte(password))
 	err := c.Find(bson.M{"userid": userId, "password": hex.EncodeToString(hash[:])}).One(result)
 	if err != nil {
@@ -38,7 +38,7 @@ func GetUser(userId string, password string) (*User, error) {
 
 func GetOAuthClient(userId string) ([]OAuthClient, error) {
 	var results []OAuthClient
-	c := dbm.DB(database).C("oAuthClient")
+	c := dbm.DB(dbNameM).C("oAuthClient")
 	err := c.Find(bson.M{"userId": userId}).All(results)
 
 	if err != nil {
@@ -48,7 +48,7 @@ func GetOAuthClient(userId string) ([]OAuthClient, error) {
 }
 
 func CreateUser(user *User) error {
-	c := dbm.DB(database).C("user")
+	c := dbm.DB(dbNameM).C("user")
 	hashPassword(user)
 	res := c.Insert(user)
 	if res != nil {
