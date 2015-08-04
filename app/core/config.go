@@ -16,10 +16,16 @@ type RedisConfig struct {
 }
 
 type Configuration struct {
-	Secret        string      `json:"secret"`
-	PublicPath    string      `json:"public_path"`
-	MongoDatabase MongoConfig `json:"mongo_config"`
-	RedisDatabase RedisConfig `json:"redis_config"`
+	Secret             string       `json:"secret"`
+	PublicPath         string       `json:"public_path"`
+	MongoDatabase      MongoConfig  `json:"mongo_config"`
+	RedisDatabase      RedisConfig  `json:"redis_config"`
+	TwitterLoginConfig TwitterLogin `json:"twitter_login"`
+}
+
+type TwitterLogin struct {
+	ConsumerKey    string `json:"consumer_key"`
+	ConsumerSecret string `json:"consumer_secret"`
 }
 
 func (config *Configuration) Load(filename string) error {
