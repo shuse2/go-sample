@@ -7,27 +7,18 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
+const (
+	TABLE_USER = "user"
+)
+
 type User struct {
 	UserId   string
 	Password string
 }
 
-type OAuthClient struct {
-	Name   string
-	Id     string
-	Secret string
-	UserId string
-}
-
-type Token struct {
-	UserId   string
-	ClientId string
-	Token    string
-}
-
 func GetUser(userId string, password string) (*User, error) {
 	result := &User{}
-	c := dbm.DB(dbNameM).C("user")
+	c := dbm.DB(dbNameM).C(TABLE_USER)
 	hash := md5.Sum([]byte(password))
 	err := c.Find(bson.M{"userid": userId, "password": hex.EncodeToString(hash[:])}).One(result)
 	if err != nil {
@@ -36,19 +27,8 @@ func GetUser(userId string, password string) (*User, error) {
 	return result, nil
 }
 
-func GetOAuthClient(userId string) ([]OAuthClient, error) {
-	var results []OAuthClient
-	c := dbm.DB(dbNameM).C("oAuthClient")
-	err := c.Find(bson.M{"userId": userId}).All(results)
-
-	if err != nil {
-		return results, err
-	}
-	return results, nil
-}
-
 func CreateUser(user *User) error {
-	c := dbm.DB(dbNameM).C("user")
+	c := dbm.DB(dbNameM).C(TABLE_USER)
 	hashPassword(user)
 	res := c.Insert(user)
 	if res != nil {

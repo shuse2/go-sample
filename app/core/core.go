@@ -1,17 +1,18 @@
 package core
 
 import (
+	"github.com/go-sample/app/config"
 	"github.com/golang/glog"
 	"github.com/gorilla/sessions"
 )
 
 type Application struct {
-	Configuration *Configuration
+	Configuration *config.Configuration
 	Store         *sessions.CookieStore
 }
 
 func (application *Application) Init(filename string) {
-	application.Configuration = &Configuration{}
+	application.Configuration = &config.Configuration{}
 
 	err := application.Configuration.Load(filename)
 
