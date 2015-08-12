@@ -8,5 +8,9 @@
   "redis_config": {
     "host": "localhost:6379",
     "database": 0
+  },
+  "twitter_login": {
+    "consumer_key": "g3CcQ7DqjrwbABS37nZPk1odo",
+    "consumer_secret": "S4jdl2Pj6Ed4T0aXjHdAmOh1FXye9EfzDg4KnVWWkLmz2M9wVj"
   }
 }

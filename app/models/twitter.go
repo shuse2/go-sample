@@ -20,60 +20,37 @@ func initTwitter(conf *config.Configuration) {
 		})
 }
 
-func GetRequestTokenAndURL(userId string) (string, error) {
-	requestToken, url, err := consumer.GetRequestTokenAndUrl("oob")
+func GetRequestTokenAndURL(callbackUrl string) (*RequestToken, error) {
+	requestToken, url, err := consumer.GetRequestTokenAndUrl(callbackUrl)
+	rToken := &RequestToken{}
 	if err != nil {
 		glog.Fatal("Twitter Failed to get request token")
-		return "", err
-	}
-	client := &OAuthClient{
-		Name:   "Twitter",
-		Id:     requestToken.Token,
-		Secret: requestToken.Secret,
-		UserId: userId,
+		return rToken, err
 	}
 
-	cm := dbm.DB(dbNameM).C(TABLE_OAUTH_CLIENT)
-	dberr := cm.Insert(client)
+	rToken.Token = requestToken.Token
+	rToken.Secret = requestToken.Secret
+	rToken.Url = url
 
-	if dberr != nil {
-		return "", dberr
-	}
-	return url, nil
+	return rToken, nil
 }
 
-func VarifyToken(userId string, varificationCode string) error {
+func VarifyToken(requestToken *RequestToken, varificationCode string) (*AccessToken, error) {
 
-	oauthclient, err := getOAuthClient(userId, "Twitter")
+	aToken := &AccessToken{}
 
+	rToken := &oauth.RequestToken{
+		Token:  requestToken.Token,
+		Secret: requestToken.Secret,
+	}
+
+	accessToken, err := consumer.AuthorizeToken(rToken, varificationCode)
 	if err != nil {
-		glog.Error("oauthclient not found")
-		return err
+		return aToken, err
 	}
+	aToken.Token = accessToken.Token
+	aToken.Secret = accessToken.Secret
+	accessToken.AdditionalData = accessToken.AdditionalData
 
-	requestToken := &oauth.RequestToken{
-		Token:  oauthclient.Id,
-		Secret: oauthclient.Secret,
-	}
-
-	accessToken, err := consumer.AuthorizeToken(requestToken, varificationCode)
-	if err != nil {
-		return err
-	}
-
-	token := &Token{
-		UserId:   userId,
-		ClientId: oauthclient.Id,
-		Token:    accessToken.Token,
-	}
-
-	cm := dbm.DB(dbNameM).C(TABLE_OAUTH_TOKEN)
-	dberr := cm.Insert(token)
-
-	if dberr != nil {
-		glog.Errorf("oauthclient not found: %s", dberr.Error)
-		return dberr
-	}
-
-	return nil
+	return aToken, nil
 }

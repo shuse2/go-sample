@@ -3,6 +3,7 @@ package models
 import (
 	"github.com/go-sample/app/config"
 	"github.com/golang/glog"
+	"github.com/gorilla/sessions"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/redis.v3"
 )
@@ -10,6 +11,7 @@ import (
 var (
 	dbm     *mgo.Session
 	dbr     *redis.Client
+	session *sessions.Session
 	dbNameM string
 )
 
