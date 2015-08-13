@@ -4,7 +4,6 @@ import (
 	// "fmt"
 	"github.com/go-sample/app/models"
 	"github.com/golang/glog"
-	"github.com/gorilla/sessions"
 	"net/http"
 )
 

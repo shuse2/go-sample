@@ -4,39 +4,34 @@ import (
 	"github.com/go-sample/app/config"
 	"github.com/golang/glog"
 	"github.com/gorilla/sessions"
+	"gopkg.in/boj/redistore.v1"
 	"gopkg.in/mgo.v2"
-	"gopkg.in/redis.v3"
 )
 
 var (
 	dbm     *mgo.Session
-	dbr     *redis.Client
+	store   *redistore.RediStore
 	session *sessions.Session
 	dbNameM string
 )
 
 func Init(conf *config.Configuration) {
-	mongoC, err := mgo.Dial(conf.MongoDatabase.Host)
+	// connection to mongo
+	var mgoerr error
+	dbm, mgoerr = mgo.Dial(conf.MongoDatabase.Host)
 
-	if err != nil {
-		glog.Fatalf("Cannot connect to mongo database %v", err)
-		panic(err)
+	if mgoerr != nil {
+		glog.Fatalf("Cannot connect to mongo database %v", mgoerr)
+		panic(mgoerr)
 	}
-	dbm = mongoC
 	dbNameM = conf.MongoDatabase.Database
 
-	redisC := redis.NewClient(&redis.Options{
-		Addr: conf.RedisDatabase.Host,
-		DB:   conf.RedisDatabase.Database,
-	})
-	dbr = redisC
-	// check redis health
-	{
-		_, err := dbr.Ping().Result()
-		if err != nil {
-			glog.Fatalf("Cannot connect to redis database %v", err)
-			panic(err)
-		}
+	// session store
+	var storeerr error
+	store, storeerr = redistore.NewRediStore(10, "tcp", ":6379", "", []byte("secret-key"))
+	if storeerr != nil {
+		glog.Fatalf("Cannot connect to redis database %v", storeerr)
+		panic(storeerr)
 	}
 
 	initTwitter(conf)
@@ -45,5 +40,5 @@ func Init(conf *config.Configuration) {
 func Close() {
 	glog.Info("Closing application")
 	dbm.Close()
-	dbr.Close()
+	store.Close()
 }
