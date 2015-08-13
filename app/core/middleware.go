@@ -23,6 +23,14 @@ func (application *Application) AuthHandler(next http.Handler) http.Handler {
 	return http.HandlerFunc(fn)
 }
 
+func (application *Application) ContextTypeHandler(next http.Handler) http.Handler {
+	fn := func(res http.ResponseWriter, req *http.Request) {
+		res.Header().Set("Content-Type", "application/vnd.api+json")
+		next.ServeHTTP(res, req)
+	}
+	return http.HandlerFunc(fn)
+}
+
 // middleware?
 func (application *Application) RecoveryHandler(next http.Handler) http.Handler {
 	fn := func(res http.ResponseWriter, req *http.Request) {

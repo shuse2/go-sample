@@ -40,6 +40,7 @@ func main() {
 	router := httprouter.New()
 	router.ServeFiles("/public/*filepath", http.Dir("public"))
 	router.GET("/", wrapHandler(commonHandlers.ThenFunc(controllers.IndexHandler)))
+	commonHandlers = commonHandlers.Append(application.ContextTypeHandler)
 	router.GET("/twitter/login", wrapHandler(commonHandlers.ThenFunc(controllers.TwitterLoginHandler)))
 	router.GET("/twitter/callback", wrapHandler(commonHandlers.ThenFunc(controllers.TwitterLoginCallbackHandler)))
 	// add auth handler
