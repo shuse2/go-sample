@@ -6,12 +6,12 @@ import (
 	"github.com/gorilla/sessions"
 	"gopkg.in/boj/redistore.v1"
 	"gopkg.in/mgo.v2"
+	"net/http"
 )
 
 var (
 	dbm     *mgo.Session
 	store   *redistore.RediStore
-	session *sessions.Session
 	dbNameM string
 )
 
@@ -41,4 +41,14 @@ func Close() {
 	glog.Info("Closing application")
 	dbm.Close()
 	store.Close()
+}
+
+func GetSession(req *http.Request, key string) (*sessions.Session, error) {
+	session, err := store.Get(req, key)
+	if err != nil {
+		glog.Errorf("Session cannot be obtained %s", err)
+		return session, err
+	}
+
+	return session, nil
 }
