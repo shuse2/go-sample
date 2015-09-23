@@ -2,15 +2,15 @@ package main
 
 import (
 	"flag"
-	"github.com/golang/glog"
+	"github.com/go-sample/app/Godeps/_workspace/src/github.com/golang/glog"
 	// "errors"
+	"github.com/go-sample/app/Godeps/_workspace/src/github.com/gorilla/context"
+	"github.com/go-sample/app/Godeps/_workspace/src/github.com/julienschmidt/httprouter"
+	"github.com/go-sample/app/Godeps/_workspace/src/github.com/justinas/alice"
 	"github.com/go-sample/app/controllers"
 	"github.com/go-sample/app/core"
 	"github.com/go-sample/app/loggers"
 	"github.com/go-sample/app/models"
-	"github.com/gorilla/context"
-	"github.com/julienschmidt/httprouter"
-	"github.com/justinas/alice"
 	"net/http"
 )
 
